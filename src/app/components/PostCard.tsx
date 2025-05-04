@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 type PostCardProps = {
   title: string;
@@ -14,7 +15,15 @@ export default function PostCard({ title, slug, date, thumbnailUrl, category }: 
       <Link href={`/blog/${slug}`} className="block flex-grow">
         <div className="aspect-video overflow-hidden relative">
           {thumbnailUrl ? (
-            <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
+            <div className="relative w-full h-full">
+              <Image
+                src={thumbnailUrl}
+                alt={`Thumbnail for ${title}`}
+                className="object-cover transform group-hover:scale-105 transition-transform duration-500"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
+            </div>
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-[var(--primary-light)]/30 to-[var(--secondary-light)]/30 flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-[var(--primary)]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">

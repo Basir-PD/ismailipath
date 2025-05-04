@@ -2,6 +2,7 @@ import { fetchPages } from "@/app/lib/notion";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import Image from "next/image";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 type NotionTitle = {
@@ -20,7 +21,15 @@ type NotionFiles = {
   }>;
 };
 
-export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
+// Define the correct params type
+type PageProps = {
+  params: {
+    category: string;
+  };
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const category = decodeURIComponent(params.category);
 
   return {
@@ -29,7 +38,7 @@ export async function generateMetadata({ params }: { params: { category: string 
   };
 }
 
-export default async function CategoryPage({ params }: { params: { category: string } }) {
+export default async function CategoryPage({ params }: PageProps) {
   const category = decodeURIComponent(params.category);
   const posts = await fetchPages(category);
 
@@ -68,8 +77,8 @@ export default async function CategoryPage({ params }: { params: { category: str
                 <div className="flex gap-4">
                   {thumbnailUrl && (
                     <div className="flex-shrink-0">
-                      <Link href={`/blog/${slug}`} className="block" prefetch={true}>
-                        <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-24 h-24 object-cover rounded" loading="lazy" width={96} height={96} />
+                      <Link href={`/blog/${slug}`} className="block relative w-24 h-24" prefetch={true}>
+                        <Image src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="object-cover rounded" fill sizes="96px" />
                       </Link>
                     </div>
                   )}

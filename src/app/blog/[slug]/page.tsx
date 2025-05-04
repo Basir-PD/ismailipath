@@ -10,6 +10,7 @@ import NotionContentRenderer from "@/app/components/NotionContentRenderer";
 import ShareButtons from "@/app/components/ShareButtons";
 import "@/app/lib/notionBlockStyles.css";
 import { Suspense } from "react";
+import Image from "next/image";
 
 type NotionTitle = {
   title: Array<{ plain_text: string }>;
@@ -34,7 +35,15 @@ type NotionFiles = {
   }>;
 };
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+// Define the correct params type
+type PageProps = {
+  params: {
+    slug: string;
+  };
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = await fetchBySlug(params.slug);
 
   if (!post) {
@@ -63,7 +72,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: PageProps) {
   const post = await fetchBySlug(params.slug);
 
   if (!post) {
@@ -105,7 +114,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <article className="bg-white rounded-xl shadow-sm overflow-hidden">
         {thumbnailUrl && (
           <div className="relative h-64 md:h-96 overflow-hidden">
-            <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-full h-full object-cover" loading="eager" fetchPriority="high" />
+            {/* Replace img with Next.js Image component */}
+            <div className="relative w-full h-full">
+              <Image src={thumbnailUrl} alt={`Thumbnail for ${title}`} fill className="object-cover" priority />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
             <div className="absolute bottom-0 w-full p-6 text-white">
