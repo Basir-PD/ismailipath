@@ -7,11 +7,12 @@ type NavLinkProps = {
   href: string;
   children: React.ReactNode;
   className?: string;
+  exact?: boolean;
 };
 
-export default function NavLink({ href, children, className = "" }: NavLinkProps) {
+export default function NavLink({ href, children, className = "", exact = false }: NavLinkProps) {
   const pathname = usePathname();
-  const isActive = pathname === href || (href !== "/" && pathname?.startsWith(href));
+  const isActive = exact ? pathname === href : href !== "/" && pathname?.startsWith(href);
 
   return (
     <Link

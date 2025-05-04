@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Cormorant } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
-import { fetchCategories } from "./lib/notion";
-import NavigationProvider from "./components/NavigationProvider";
-import Footer from "./components/Footer";
+import Navbar from "@/app/components/Navbar";
+import Sidebar from "@/app/components/Sidebar";
+import { fetchCategories } from "@/app/lib/notion";
+import NavigationProvider from "@/app/components/NavigationProvider";
+import Footer from "@/app/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,9 +51,9 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} antialiased min-h-screen flex flex-col bg-[var(--background)]`}>
         <NavigationProvider>
           <Navbar />
-          <div className="flex-grow flex">
+          <div className="flex-grow flex relative">
             <Sidebar categories={categories} />
-            <main className="flex-1 max-w-4xl mx-auto py-8 px-4 md:px-8">{children}</main>
+            <main className="flex-1 max-w-4xl mx-auto py-8 px-4 md:px-8 transition-all duration-300 ease-in-out">{children}</main>
           </div>
           <Footer />
         </NavigationProvider>

@@ -1,9 +1,13 @@
 import Link from "next/link";
-import MobileSidebarToggle from "./MobileSidebarToggle";
-import ReadingProgressBar from "./ReadingProgressBar";
-import NavLink from "./NavLink";
+import MobileSidebarToggle from "@/app/components/MobileSidebarToggle";
+import ReadingProgressBar from "@/app/components/ReadingProgressBar";
+import NavLink from "@/app/components/NavLink";
+import CategoryDropdown from "@/app/components/CategoryDropdown";
+import { fetchCategories } from "@/app/lib/notion";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const categories = await fetchCategories();
+
   return (
     <header className="sticky top-0 z-50">
       <ReadingProgressBar />
@@ -25,7 +29,7 @@ export default function Navbar() {
           <div className="hidden md:flex space-x-1">
             <NavLink href="/">Home</NavLink>
             <NavLink href="/blog">Blog</NavLink>
-            <NavLink href="/categories">Categories</NavLink>
+            <CategoryDropdown categories={categories} />
             <NavLink href="/about">About</NavLink>
           </div>
 
