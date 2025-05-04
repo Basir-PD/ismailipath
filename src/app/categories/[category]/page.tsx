@@ -68,15 +68,15 @@ export default async function CategoryPage({ params }: { params: { category: str
                 <div className="flex gap-4">
                   {thumbnailUrl && (
                     <div className="flex-shrink-0">
-                      <Link href={`/blog/${slug}`} className="block">
-                        <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-24 h-24 object-cover rounded" />
+                      <Link href={`/blog/${slug}`} className="block" prefetch={true}>
+                        <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-24 h-24 object-cover rounded" loading="lazy" width={96} height={96} />
                       </Link>
                     </div>
                   )}
                   <div className={thumbnailUrl ? "flex-grow" : ""}>
                     <h3 className="text-xl font-semibold mb-2">
                       {slug ? (
-                        <Link href={`/blog/${slug}`} className="hover:text-blue-600 transition-colors">
+                        <Link href={`/blog/${slug}`} className="hover:text-blue-600 transition-colors" prefetch={true}>
                           {title}
                         </Link>
                       ) : (

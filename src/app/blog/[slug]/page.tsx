@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           <h1 className="text-3xl font-bold mb-3">{title}</h1>
           <div className="flex items-center gap-3">
             {category && (
-              <Link href={`/categories/${encodeURIComponent(category)}`} className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors">
+              <Link href={`/categories/${encodeURIComponent(category)}`} className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors" prefetch={true}>
                 {category}
               </Link>
             )}
@@ -96,12 +96,22 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
         {thumbnailUrl && (
           <div className="mb-6">
-            <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-full h-auto rounded-md shadow-sm" />
+            <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-full h-auto rounded-md shadow-sm" loading="eager" fetchPriority="high" />
           </div>
         )}
 
         <div className="prose prose-sm sm:prose lg:prose-lg max-w-none notion-content">
-          <div dangerouslySetInnerHTML={{ __html: html }} />
+          <Suspense
+            fallback={
+              <div className="animate-pulse space-y-4">
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-200 rounded w-4/5"></div>
+              </div>
+            }
+          >
+            <div dangerouslySetInnerHTML={{ __html: html }} />
+          </Suspense>
           <Suspense fallback={null}>
             <NotionContentRenderer />
           </Suspense>

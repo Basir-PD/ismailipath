@@ -1,14 +1,18 @@
 import "server-only";
 
-import React from "react";
+import { cache } from "react";
 import { Client } from "@notionhq/client";
 import { BlockObjectResponse, PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
+// Initialize Notion client
 export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-export const fetchPages = React.cache(async (categoryFilter?: string) => {
+// Enhanced caching for page fetching
+export const fetchPages = cache(async (categoryFilter?: string) => {
+  console.log(`Fetching pages ${categoryFilter ? `for category: ${categoryFilter}` : "all"}`);
+
   const filter = categoryFilter
     ? {
         and: [
@@ -41,7 +45,10 @@ export const fetchPages = React.cache(async (categoryFilter?: string) => {
   return response.results;
 });
 
-export const fetchCategories = React.cache(async () => {
+// Enhanced caching for categories fetching
+export const fetchCategories = cache(async () => {
+  console.log("Fetching categories");
+
   const response = await notion.databases.retrieve({
     database_id: process.env.NOTION_DATABASE_ID as string,
   });
@@ -59,7 +66,10 @@ export const fetchCategories = React.cache(async () => {
   return [];
 });
 
-export const fetchBySlug = React.cache(async (slug: string) => {
+// Enhanced caching for slug-based page fetching
+export const fetchBySlug = cache(async (slug: string) => {
+  console.log(`Fetching page by slug: ${slug}`);
+
   return notion.databases
     .query({
       database_id: process.env.NOTION_DATABASE_ID!,
@@ -73,7 +83,10 @@ export const fetchBySlug = React.cache(async (slug: string) => {
     .then((res) => res.results[0] as PageObjectResponse | undefined);
 });
 
-export const fetchPageBlocks = React.cache(async (pageId: string) => {
+// Enhanced caching for block fetching
+export const fetchPageBlocks = cache(async (pageId: string) => {
+  console.log(`Fetching blocks for page: ${pageId}`);
+
   return notion.blocks.children
     .list({
       block_id: pageId,

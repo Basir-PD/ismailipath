@@ -82,7 +82,7 @@ export default async function Home() {
             <section key={category} className="bg-white p-6 rounded-lg shadow-sm">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-gray-800">{category}</h2>
-                <Link href={`/categories/${encodeURIComponent(category)}`} className="text-sm text-blue-600 hover:text-blue-800">
+                <Link href={`/categories/${encodeURIComponent(category)}`} className="text-sm text-blue-600 hover:text-blue-800" prefetch={true}>
                   View all
                 </Link>
               </div>
@@ -108,15 +108,15 @@ export default async function Home() {
                       <div className="flex gap-4">
                         {thumbnailUrl && (
                           <div className="flex-shrink-0">
-                            <Link href={`/blog/${slug}`} className="block">
-                              <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-20 h-20 object-cover rounded" />
+                            <Link href={`/blog/${slug}`} className="block" prefetch={true}>
+                              <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-20 h-20 object-cover rounded" loading="lazy" width={80} height={80} />
                             </Link>
                           </div>
                         )}
                         <div className={thumbnailUrl ? "flex-grow" : ""}>
                           <h3 className="text-lg font-medium mb-1">
                             {slug ? (
-                              <Link href={`/blog/${slug}`} className="hover:text-blue-600 transition-colors">
+                              <Link href={`/blog/${slug}`} className="hover:text-blue-600 transition-colors" prefetch={true}>
                                 {title}
                               </Link>
                             ) : (

@@ -30,6 +30,7 @@ export default function Sidebar({ categories }: SidebarProps) {
             href="/"
             className={`block px-2 py-2 rounded-md transition-colors ${isActive("/") && !pathname.startsWith("/categories/") ? "bg-blue-50 text-blue-600 font-medium" : "hover:bg-gray-100"}`}
             aria-current={isActive("/") && !pathname.startsWith("/categories/") ? "page" : undefined}
+            prefetch={true}
           >
             All Articles
           </Link>
@@ -42,6 +43,7 @@ export default function Sidebar({ categories }: SidebarProps) {
                 isActive(`/categories/${encodeURIComponent(category.name)}`) ? "bg-blue-50 text-blue-600 font-medium" : "hover:bg-gray-100"
               }`}
               aria-current={isActive(`/categories/${encodeURIComponent(category.name)}`) ? "page" : undefined}
+              prefetch={true}
             >
               {category.name}
             </Link>

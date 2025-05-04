@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import { fetchCategories } from "./lib/notion";
+import NavigationProvider from "./components/NavigationProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,14 +31,16 @@ export default async function RootLayout({
   return (
     <html lang="en" className="light">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-[#f9f9f9]`}>
-        <Navbar />
-        <div className="flex-grow flex">
-          <Sidebar categories={categories} />
-          <main className="flex-1 max-w-4xl mx-auto py-8 px-4 md:px-8">{children}</main>
-        </div>
-        <footer className="border-t py-4 mt-8 bg-white">
-          <div className="max-w-4xl mx-auto px-4 text-center text-sm text-gray-500">© {new Date().getFullYear()} IsmailiPath. All rights reserved.</div>
-        </footer>
+        <NavigationProvider>
+          <Navbar />
+          <div className="flex-grow flex">
+            <Sidebar categories={categories} />
+            <main className="flex-1 max-w-4xl mx-auto py-8 px-4 md:px-8">{children}</main>
+          </div>
+          <footer className="border-t py-4 mt-8 bg-white">
+            <div className="max-w-4xl mx-auto px-4 text-center text-sm text-gray-500">© {new Date().getFullYear()} IsmailiPath. All rights reserved.</div>
+          </footer>
+        </NavigationProvider>
       </body>
     </html>
   );
