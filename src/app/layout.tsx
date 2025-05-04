@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import { fetchCategories } from "./lib/notion";
 import NavigationProvider from "./components/NavigationProvider";
+import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,9 +18,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const cormorant = Cormorant({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "IsmailiPath",
-  description: "Discover spiritual knowledge and teachings",
+  description: "Discover spiritual knowledge and teachings on the Ismaili Path - Explore insightful articles on spirituality, history, and wisdom",
+  keywords: "Ismaili, spirituality, knowledge, teachings, wisdom, guidance",
+  authors: [{ name: "IsmailiPath" }],
+  openGraph: {
+    title: "IsmailiPath",
+    description: "Discover spiritual knowledge and teachings on the Ismaili Path",
+    url: "https://ismailipath.com",
+    siteName: "IsmailiPath",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default async function RootLayout({
@@ -30,16 +48,14 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className="light">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-[#f9f9f9]`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} antialiased min-h-screen flex flex-col bg-[var(--background)]`}>
         <NavigationProvider>
           <Navbar />
           <div className="flex-grow flex">
             <Sidebar categories={categories} />
             <main className="flex-1 max-w-4xl mx-auto py-8 px-4 md:px-8">{children}</main>
           </div>
-          <footer className="border-t py-4 mt-8 bg-white">
-            <div className="max-w-4xl mx-auto px-4 text-center text-sm text-gray-500">© {new Date().getFullYear()} IsmailiPath. All rights reserved.</div>
-          </footer>
+          <Footer />
         </NavigationProvider>
       </body>
     </html>
