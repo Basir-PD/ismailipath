@@ -6,7 +6,9 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import FixNotionLists from "./FixNotionLists";
+import NotionContentRenderer from "@/app/components/NotionContentRenderer";
+import "@/app/lib/notionBlockStyles.css";
+import { Suspense } from "react";
 
 type NotionTitle = {
   title: Array<{ plain_text: string }>;
@@ -81,7 +83,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </header>
         <div className="prose prose-sm sm:prose lg:prose-lg max-w-none notion-content">
           <div dangerouslySetInnerHTML={{ __html: html }} />
-          <FixNotionLists />
+          <Suspense fallback={null}>
+            <NotionContentRenderer />
+          </Suspense>
         </div>
       </article>
     </div>
