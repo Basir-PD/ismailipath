@@ -1,0 +1,73 @@
+import { fetchPages } from "@/app/lib/notion";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
+import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+
+type NotionTitle = {
+  title: Array<{ plain_text: string }>;
+};
+
+type NotionRichText = {
+  rich_text: Array<{ plain_text: string }>;
+};
+
+export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
+  const category = decodeURIComponent(params.category);
+
+  return {
+    title: `${category} Articles | IsmailiPath`,
+    description: `Browse all articles in the ${category} category`,
+  };
+}
+
+export default async function CategoryPage({ params }: { params: { category: string } }) {
+  const category = decodeURIComponent(params.category);
+  const posts = await fetchPages(category);
+
+  if (!posts || posts.length === 0) {
+    notFound();
+  }
+
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">{category}</h1>
+        <p className="text-gray-600">Browse all articles in this category</p>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-sm">
+        <div className="divide-y">
+          {posts?.map((post) => {
+            const pagePost = post as PageObjectResponse;
+
+            const title = (pagePost.properties.Title as NotionTitle)?.title?.[0]?.plain_text || "Untitled";
+            const slug = (pagePost.properties.Slug as NotionRichText)?.rich_text?.[0]?.plain_text;
+            const date = pagePost.created_time
+              ? new Date(pagePost.created_time).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              : null;
+
+            return (
+              <article key={pagePost.id} className="py-6 first:pt-0 last:pb-0">
+                <h3 className="text-xl font-semibold mb-2">
+                  {slug ? (
+                    <Link href={`/blog/${slug}`} className="hover:text-blue-600 transition-colors">
+                      {title}
+                    </Link>
+                  ) : (
+                    title
+                  )}
+                </h3>
+                {date && <p className="text-sm text-gray-500">{date}</p>}
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f9f9f9;
   --foreground: #171717;
 }
 
@@ -12,15 +12,97 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* Removing dark mode support */
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Notion content styling */
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose li {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Fix for nested lists */
+.prose li > ul {
+  list-style-type: circle;
+}
+
+.prose li > ul > li > ul {
+  list-style-type: square;
+}
+
+/* Additional Notion-specific styles */
+.notion-content ul {
+  list-style-type: disc !important;
+  margin-left: 1rem;
+}
+
+.notion-content ol {
+  list-style-type: decimal !important;
+  margin-left: 1rem;
+}
+
+.notion-content li {
+  padding-left: 0.5rem;
+}
+
+/* Fix indentation and spacing */
+.notion-content ul li::marker,
+.notion-content ol li::marker {
+  color: #4b5563;
+}
+
+/* Ensure proper nesting */
+.notion-content ul ul {
+  list-style-type: circle !important;
+}
+
+.notion-content ul ul ul {
+  list-style-type: square !important;
+}
+
+/* Fix for bulleted and numbered list items */
+li.bulleted_list_item,
+li.numbered_list_item {
+  display: list-item !important;
+  list-style-position: outside !important;
+  margin-left: 1.5rem !important;
+}
+
+li.bulleted_list_item {
+  list-style-type: disc !important;
+}
+
+li.numbered_list_item {
+  list-style-type: decimal !important;
 }

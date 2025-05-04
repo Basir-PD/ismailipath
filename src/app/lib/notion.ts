@@ -8,18 +8,55 @@ export const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-export const fetchPages = React.cache(async () => {
+export const fetchPages = React.cache(async (categoryFilter?: string) => {
+  const filter = categoryFilter
+    ? {
+        and: [
+          {
+            property: "Status",
+            status: {
+              equals: "Live",
+            },
+          },
+          {
+            property: "Category",
+            select: {
+              equals: categoryFilter,
+            },
+          },
+        ],
+      }
+    : {
+        property: "Status",
+        status: {
+          equals: "Live",
+        },
+      };
+
   const response = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID as string,
-    filter: {
-      property: "Status",
-      status: {
-        equals: "Live",
-      },
-    },
+    filter,
   });
 
   return response.results;
+});
+
+export const fetchCategories = React.cache(async () => {
+  const response = await notion.databases.retrieve({
+    database_id: process.env.NOTION_DATABASE_ID as string,
+  });
+
+  // Extract categories from the database properties
+  const categoryProperty = response.properties.Category;
+  if (categoryProperty?.type === "select" && categoryProperty.select.options) {
+    return categoryProperty.select.options.map((option) => ({
+      id: option.id,
+      name: option.name,
+      color: option.color,
+    }));
+  }
+
+  return [];
 });
 
 export const fetchBySlug = React.cache(async (slug: string) => {

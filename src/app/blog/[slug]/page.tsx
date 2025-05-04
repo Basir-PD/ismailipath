@@ -4,6 +4,20 @@ import { NotionRenderer } from "@notion-render/client";
 import hljsPlugin from "@notion-render/hljs-plugin";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import Link from "next/link";
+import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import FixNotionLists from "./FixNotionLists";
+
+type NotionTitle = {
+  title: Array<{ plain_text: string }>;
+};
+
+type NotionSelect = {
+  select: {
+    name: string;
+    color: string;
+  };
+};
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await fetchBySlug(params.slug);
@@ -14,7 +28,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
   }
 
-  const title = (post as any).properties.Title?.title?.[0]?.plain_text || "Untitled";
+  const pagePost = post as PageObjectResponse;
+  const title = (pagePost.properties.Title as NotionTitle)?.title?.[0]?.plain_text || "Untitled";
 
   return {
     title: `${title} | IsmailiPath`,
@@ -29,9 +44,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   const blocks = await fetchPageBlocks(post.id);
-  const title = (post as any).properties.Title?.title?.[0]?.plain_text || "Untitled";
-  const date = post.created_time
-    ? new Date(post.created_time).toLocaleDateString("en-US", {
+  const pagePost = post as PageObjectResponse;
+
+  const title = (pagePost.properties.Title as NotionTitle)?.title?.[0]?.plain_text || "Untitled";
+  const category = (pagePost.properties.Category as NotionSelect)?.select?.name;
+  const date = pagePost.created_time
+    ? new Date(pagePost.created_time).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -48,16 +66,24 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const html = await renderer.render(...blocks);
 
   return (
-    <main className="max-w-2xl mx-auto py-12 px-4">
-      <article>
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{title}</h1>
-          {date && <p className="text-gray-500">{date}</p>}
+    <div>
+      <article className="bg-white p-6 rounded-lg shadow-sm">
+        <header className="mb-8 pb-6 border-b">
+          <h1 className="text-3xl font-bold mb-3">{title}</h1>
+          <div className="flex items-center gap-3">
+            {category && (
+              <Link href={`/categories/${encodeURIComponent(category)}`} className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors">
+                {category}
+              </Link>
+            )}
+            {date && <p className="text-sm text-gray-500">{date}</p>}
+          </div>
         </header>
-        <div className="prose prose-sm sm:prose lg:prose-lg max-w-none">
+        <div className="prose prose-sm sm:prose lg:prose-lg max-w-none notion-content">
           <div dangerouslySetInnerHTML={{ __html: html }} />
+          <FixNotionLists />
         </div>
       </article>
-    </main>
+    </div>
   );
 }
