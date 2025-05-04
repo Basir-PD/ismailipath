@@ -12,6 +12,15 @@ import "@/app/lib/notionBlockStyles.css";
 import { Suspense } from "react";
 import Image from "next/image";
 
+// Update the params type to be a Promise
+type PageParams = {
+  slug: string;
+};
+
+type ParamsProps = {
+  params: Promise<PageParams>;
+};
+
 type NotionTitle = {
   title: Array<{ plain_text: string }>;
 };
@@ -35,16 +44,10 @@ type NotionFiles = {
   }>;
 };
 
-// Define the correct params type
-type PageProps = {
-  params: {
-    slug: string;
-  };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = await fetchBySlug(params.slug);
+// Update to handle async params
+export async function generateMetadata({ params }: ParamsProps): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await fetchBySlug(slug);
 
   if (!post) {
     return {
@@ -72,8 +75,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function Page({ params }: PageProps) {
-  const post = await fetchBySlug(params.slug);
+export default async function Page({ params }: ParamsProps) {
+  const { slug } = await params;
+  const post = await fetchBySlug(slug);
 
   if (!post) {
     notFound();

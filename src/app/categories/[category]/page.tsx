@@ -13,6 +13,14 @@ type NotionRichText = {
   rich_text: Array<{ plain_text: string }>;
 };
 
+type CategoryParams = {
+  category: string;
+};
+
+type ParamsProps = {
+  params: Promise<CategoryParams>;
+};
+
 type NotionFiles = {
   files: Array<{
     file?: { url: string };
@@ -20,17 +28,9 @@ type NotionFiles = {
     name: string;
   }>;
 };
-
 // Define the correct params type
-type PageProps = {
-  params: {
-    category: string;
-  };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const category = decodeURIComponent(params.category);
+export async function generateMetadata({ params }: ParamsProps): Promise<Metadata> {
+  const { category } = await params;
 
   return {
     title: `${category} Articles | IsmailiPath`,
@@ -38,9 +38,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function CategoryPage({ params }: PageProps) {
-  const category = decodeURIComponent(params.category);
-  const posts = await fetchPages(category);
+export default async function CategoryPage({ params }: ParamsProps) {
+  const { category } = await params;
+  const decodedCategory = decodeURIComponent(category);
+  const posts = await fetchPages(decodedCategory);
 
   if (!posts || posts.length === 0) {
     notFound();

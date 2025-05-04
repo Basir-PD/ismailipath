@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 interface NavigationContextType {
@@ -23,7 +23,8 @@ const NavigationContext = createContext<NavigationContextType>({
 
 export const useNavigation = () => useContext(NavigationContext);
 
-export default function NavigationProvider({ children }: { children: ReactNode }) {
+// Client component that uses useSearchParams
+function NavigationController({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isNavigating, setIsNavigating] = useState(false);
@@ -112,5 +113,31 @@ export default function NavigationProvider({ children }: { children: ReactNode }
       )}
       {children}
     </NavigationContext.Provider>
+  );
+}
+
+// Fallback for Suspense boundary
+function NavigationFallback({ children }: { children: ReactNode }) {
+  return (
+    <NavigationContext.Provider
+      value={{
+        isNavigating: false,
+        isSidebarOpen: false,
+        isDesktopSidebarCollapsed: false,
+        toggleSidebar: () => {},
+        toggleDesktopSidebar: () => {},
+        closeSidebar: () => {},
+      }}
+    >
+      {children}
+    </NavigationContext.Provider>
+  );
+}
+
+export default function NavigationProvider({ children }: { children: ReactNode }) {
+  return (
+    <Suspense fallback={<NavigationFallback>{children}</NavigationFallback>}>
+      <NavigationController>{children}</NavigationController>
+    </Suspense>
   );
 }
