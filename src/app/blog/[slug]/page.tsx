@@ -21,6 +21,14 @@ type NotionSelect = {
   };
 };
 
+type NotionFiles = {
+  files: Array<{
+    file?: { url: string };
+    external?: { url: string };
+    name: string;
+  }>;
+};
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await fetchBySlug(params.slug);
 
@@ -58,6 +66,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
       })
     : null;
 
+  // Get thumbnail property
+  const thumbnail = (pagePost.properties.Thumbnail as NotionFiles)?.files?.[0];
+  const thumbnailUrl = thumbnail?.file?.url || thumbnail?.external?.url;
+
   const renderer = new NotionRenderer({
     client: notion,
   });
@@ -81,6 +93,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
             {date && <p className="text-sm text-gray-500">{date}</p>}
           </div>
         </header>
+
+        {thumbnailUrl && (
+          <div className="mb-6">
+            <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-full h-auto rounded-md shadow-sm" />
+          </div>
+        )}
+
         <div className="prose prose-sm sm:prose lg:prose-lg max-w-none notion-content">
           <div dangerouslySetInnerHTML={{ __html: html }} />
           <Suspense fallback={null}>

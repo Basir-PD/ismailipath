@@ -12,6 +12,14 @@ type NotionRichText = {
   rich_text: Array<{ plain_text: string }>;
 };
 
+type NotionFiles = {
+  files: Array<{
+    file?: { url: string };
+    external?: { url: string };
+    name: string;
+  }>;
+};
+
 export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
   const category = decodeURIComponent(params.category);
 
@@ -51,18 +59,33 @@ export default async function CategoryPage({ params }: { params: { category: str
                 })
               : null;
 
+            // Get thumbnail property
+            const thumbnail = (pagePost.properties.Thumbnail as NotionFiles)?.files?.[0];
+            const thumbnailUrl = thumbnail?.file?.url || thumbnail?.external?.url;
+
             return (
               <article key={pagePost.id} className="py-6 first:pt-0 last:pb-0">
-                <h3 className="text-xl font-semibold mb-2">
-                  {slug ? (
-                    <Link href={`/blog/${slug}`} className="hover:text-blue-600 transition-colors">
-                      {title}
-                    </Link>
-                  ) : (
-                    title
+                <div className="flex gap-4">
+                  {thumbnailUrl && (
+                    <div className="flex-shrink-0">
+                      <Link href={`/blog/${slug}`} className="block">
+                        <img src={thumbnailUrl} alt={`Thumbnail for ${title}`} className="w-24 h-24 object-cover rounded" />
+                      </Link>
+                    </div>
                   )}
-                </h3>
-                {date && <p className="text-sm text-gray-500">{date}</p>}
+                  <div className={thumbnailUrl ? "flex-grow" : ""}>
+                    <h3 className="text-xl font-semibold mb-2">
+                      {slug ? (
+                        <Link href={`/blog/${slug}`} className="hover:text-blue-600 transition-colors">
+                          {title}
+                        </Link>
+                      ) : (
+                        title
+                      )}
+                    </h3>
+                    {date && <p className="text-sm text-gray-500">{date}</p>}
+                  </div>
+                </div>
               </article>
             );
           })}
