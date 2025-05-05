@@ -82,8 +82,8 @@ export default function Sidebar({ categories }: SidebarProps) {
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
           md:translate-x-0
           fixed md:sticky
-          top-0 md:top-[73px]
-          h-screen md:h-[calc(100vh-73px)]
+          top-0 md:top-0
+          h-screen md:h-[calc(100vh-0px)]
           z-40 md:z-20
           transition-all duration-300 ease-in-out
           bg-white
@@ -116,7 +116,7 @@ export default function Sidebar({ categories }: SidebarProps) {
             <h3 className={`font-cormorant text-lg font-semibold text-[var(--secondary)] ${isDesktopSidebarCollapsed ? "md:hidden" : ""}`}>Categories</h3>
             <button
               onClick={toggleCategoryDropdown}
-              className={`text-gray-500 hover:text-[var(--primary)] transition-colors ${isDesktopSidebarCollapsed ? "md:hidden" : ""}`}
+              className={`text-gray-500 hover:text-[var(--primary)] transition-colors ${isDesktopSidebarCollapsed ? "md:hidden" : "hidden"}`}
               aria-expanded={categoryDropdownOpen}
             >
               <svg
@@ -170,7 +170,7 @@ export default function Sidebar({ categories }: SidebarProps) {
             <h3 className={`font-cormorant text-lg font-semibold text-[var(--secondary)] ${isDesktopSidebarCollapsed ? "md:text-center md:hidden" : ""}`}>Quick Links</h3>
             <button
               onClick={toggleQuickLinks}
-              className={`text-gray-500 hover:text-[var(--primary)] transition-colors ${isDesktopSidebarCollapsed ? "md:hidden" : ""}`}
+              className={`text-gray-500 hover:text-[var(--primary)] transition-colors ${isDesktopSidebarCollapsed ? "md:hidden" : "hidden"}`}
               aria-expanded={quickLinksOpen}
             >
               <svg
