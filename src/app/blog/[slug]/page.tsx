@@ -114,17 +114,16 @@ export default async function Page({ params }: ParamsProps) {
   const readTime = Math.ceil(wordCount / 200);
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <article className="bg-white rounded-xl shadow-sm overflow-hidden">
+    <>
+      <article className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
         {thumbnailUrl && (
-          <div className="relative h-64 md:h-96 overflow-hidden">
-            {/* Replace img with Next.js Image component */}
+          <div className="relative h-48 sm:h-64 md:h-80 lg:h-96 overflow-hidden">
             <div className="relative w-full h-full">
-              <Image src={thumbnailUrl} alt={`Thumbnail for ${title}`} fill className="object-cover" priority />
+              <Image src={thumbnailUrl} alt={`Thumbnail for ${title}`} fill className="object-cover" priority sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
-            <div className="absolute bottom-0 w-full p-6 text-white">
+            <div className="absolute bottom-0 w-full p-4 sm:p-6 text-white z-10">
               {category && (
                 <Link
                   href={`/categories/${encodeURIComponent(category)}`}
@@ -135,17 +134,17 @@ export default async function Page({ params }: ParamsProps) {
                 </Link>
               )}
 
-              <h1 className="text-3xl md:text-4xl font-bold mb-2 text-white drop-shadow-sm" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 text-white drop-shadow-sm" style={{ fontFamily: "var(--font-cormorant)" }}>
                 {title}
               </h1>
             </div>
           </div>
         )}
 
-        <div className="p-6 md:p-10">
+        <div className="p-4 sm:p-6 md:p-8 lg:p-10">
           {/* Show title if no thumbnail */}
           {!thumbnailUrl && (
-            <header className="mb-8">
+            <header className="mb-6 md:mb-8">
               {category && (
                 <Link
                   href={`/categories/${encodeURIComponent(category)}`}
@@ -156,13 +155,13 @@ export default async function Page({ params }: ParamsProps) {
                 </Link>
               )}
 
-              <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: "var(--font-cormorant)" }}>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: "var(--font-cormorant)" }}>
                 {title}
               </h1>
             </header>
           )}
 
-          <div className="flex items-center text-sm text-gray-500 mb-8 pb-6 border-b border-[var(--neutral-200)]">
+          <div className="flex flex-wrap gap-4 items-center text-sm text-gray-500 mb-6 md:mb-8 pb-4 md:pb-6 border-b border-[var(--neutral-200)]">
             {date && (
               <span className="flex items-center">
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -171,8 +170,6 @@ export default async function Page({ params }: ParamsProps) {
                 {date}
               </span>
             )}
-
-            <span className="mx-3">•</span>
 
             <span className="flex items-center">
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -197,20 +194,28 @@ export default async function Page({ params }: ParamsProps) {
                 </div>
               }
             >
-              <div dangerouslySetInnerHTML={{ __html: html }} />
+              <div
+                className="notion-content-wrapper"
+                dangerouslySetInnerHTML={{ __html: html }}
+                style={{
+                  fontSize: "clamp(1rem, 0.95rem + 0.25vw, 1.125rem)",
+                  lineHeight: "1.75",
+                  letterSpacing: "-0.01em",
+                }}
+              />
             </Suspense>
             <Suspense fallback={null}>
               <NotionContentRenderer />
             </Suspense>
           </div>
 
-          <div className="mt-10 pt-6 border-t border-[var(--neutral-200)]">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <Link href="/" className="text-[var(--primary)] hover:text-[var(--primary-light)] transition-colors flex items-center mb-4 md:mb-0">
+          <div className="mt-8 md:mt-10 pt-6 border-t border-[var(--neutral-200)]">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <Link href="/blog" className="text-[var(--primary)] hover:text-[var(--primary-light)] transition-colors flex items-center mb-4 sm:mb-0">
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
-                Back to Home
+                Back to Blog
               </Link>
 
               <ShareButtons title={title} />
@@ -218,6 +223,8 @@ export default async function Page({ params }: ParamsProps) {
           </div>
         </div>
       </article>
-    </div>
+
+      {/* Related content section could be added here */}
+    </>
   );
 }

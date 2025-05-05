@@ -52,28 +52,26 @@ export default function NotionContentRenderer() {
         `);
 
         // Process potential headers that don't have proper classes
-        document.querySelectorAll('.notion-content div, .notion-content p').forEach(el => {
+        document.querySelectorAll(".notion-content div, .notion-content p").forEach((el) => {
           // Skip elements that are already headings or inside headings
-          if (el.closest('h1, h2, h3, h4, h5, h6')) return;
-          
+          if (el.closest("h1, h2, h3, h4, h5, h6")) return;
+
           // Check if this element has heading-like styling
           const computedStyle = window.getComputedStyle(el);
           const fontSize = parseFloat(computedStyle.fontSize);
           const fontWeight = computedStyle.fontWeight;
-          
+
           // If element has larger font or bold weight, it might be a heading
-          if ((fontSize > 16 || parseInt(fontWeight) >= 600) && 
-              el.textContent && 
-              el.textContent.trim().length > 0 && 
-              el.textContent.trim().length < 100) { // Reasonable heading length
-            
+          if ((fontSize > 16 || parseInt(fontWeight) >= 600) && el.textContent && el.textContent.trim().length > 0 && el.textContent.trim().length < 100) {
+            // Reasonable heading length
+
             // Determine heading level based on font size
             let headingLevel = 2;
             if (fontSize >= 24) headingLevel = 1;
             else if (fontSize >= 20) headingLevel = 2;
             else if (fontSize >= 18) headingLevel = 3;
             else if (fontSize >= 16) headingLevel = 4;
-            
+
             // Create new heading element
             const newHeading = document.createElement(`h${headingLevel}`);
             newHeading.innerHTML = el.innerHTML;
@@ -162,7 +160,7 @@ export default function NotionContentRenderer() {
         // Structure callout with icon and content
         const calloutContent = callout.innerHTML;
         const icon = callout.querySelector(".notion-emoji");
-        
+
         // Fix for the "null" issue - only add icon HTML if icon exists
         let iconHTML = "";
         if (icon) {

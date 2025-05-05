@@ -1,5 +1,205 @@
 /* Notion Block Styles */
 
+/* Base Notion Content Styles */
+
+/* Typography */
+.notion-content {
+  font-family: var(--font-sans);
+  color: var(--foreground);
+  line-height: 1.75;
+}
+
+.notion-content h1,
+.notion-content h2,
+.notion-content h3,
+.notion-content h4,
+.notion-content h5,
+.notion-content h6 {
+  font-family: var(--font-cormorant);
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  color: var(--foreground);
+  letter-spacing: -0.025em;
+}
+
+.notion-content h1 {
+  font-size: clamp(1.875rem, 1.5rem + 1.5vw, 2.5rem);
+  margin-top: 3rem;
+}
+
+.notion-content h2 {
+  font-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+}
+
+.notion-content h3 {
+  font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.75rem);
+}
+
+.notion-content h4 {
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
+}
+
+.notion-content p {
+  margin-bottom: 1.5rem;
+  max-width: 75ch;
+}
+
+/* Links */
+.notion-content a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.notion-content a:hover {
+  color: var(--primary-light);
+  border-bottom-color: var(--primary-light);
+}
+
+/* Lists */
+.notion-content ul,
+.notion-content ol {
+  margin: 1.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.notion-content ul li,
+.notion-content ol li {
+  margin-bottom: 0.5rem;
+}
+
+/* Blockquotes */
+.notion-content blockquote {
+  font-family: var(--font-cormorant);
+  font-size: 1.25rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: #4a4a4a;
+  border-left: 3px solid var(--secondary);
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  margin: 2rem 0;
+}
+
+/* Code blocks */
+.notion-content pre {
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-family: var(--font-geist-mono);
+  font-size: 0.9rem;
+}
+
+.notion-content code {
+  font-family: var(--font-geist-mono);
+  font-size: 0.9em;
+  background-color: rgba(134, 144, 156, 0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+.notion-content pre code {
+  background-color: transparent;
+  padding: 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Images */
+.notion-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+/* Tables */
+.notion-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+.notion-content table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  text-align: left;
+}
+
+.notion-content table th,
+.notion-content table td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e5e5;
+}
+
+.notion-content table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Callouts */
+.notion-content .callout {
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: flex-start;
+  background-color: rgba(235, 236, 237, 0.5);
+}
+
+.notion-content .callout-emoji {
+  font-size: 1.25rem;
+  line-height: 1;
+  margin-right: 0.75rem;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .notion-content h1,
+  .notion-content h2,
+  .notion-content h3,
+  .notion-content h4,
+  .notion-content h5,
+  .notion-content h6 {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .notion-content blockquote {
+    padding-left: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .notion-content-wrapper {
+    padding: 0 0.25rem;
+  }
+}
+
+/* Additional typography improvements */
+.notion-content-wrapper {
+  letter-spacing: -0.011em;
+  word-spacing: 0.02em;
+}
+
+.notion-text {
+  margin-bottom: 1.25rem;
+}
+
+/* Fix for better readability */
+.notion-content p + ul,
+.notion-content p + ol {
+  margin-top: -0.5rem;
+}
+
+/* Better spacing for lists */
+.notion-list-item {
+  padding-left: 0.25rem;
+}
+
 /* Headers */
 .notion-content h1,
 .notion-content .notion-heading-1,

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useNavigation } from "./NavigationProvider";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 
 type Category = {
   id: string;
@@ -16,11 +16,18 @@ interface SidebarProps {
 
 export default function Sidebar({ categories }: SidebarProps) {
   const pathname = usePathname();
-  const { isSidebarOpen, isDesktopSidebarCollapsed, toggleDesktopSidebar } = useNavigation();
-  const [sidebarWidth, setSidebarWidth] = useState(224); // Default width 56*4 = 224px
+  const { isSidebarOpen, isDesktopSidebarCollapsed, toggleDesktopSidebar, toggleSidebar } = useNavigation();
+  const [sidebarWidth, setSidebarWidth] = useState(240); // Default width 60*4 = 240px
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(true);
+  const [quickLinksOpen, setQuickLinksOpen] = useState(true);
+
+  const handleMobileNavClick = useCallback(() => {
+    if (window.innerWidth < 768) {
+      toggleSidebar();
+    }
+  }, [toggleSidebar]);
 
   // Handle sidebar resizing
   useEffect(() => {
@@ -60,8 +67,15 @@ export default function Sidebar({ categories }: SidebarProps) {
     setCategoryDropdownOpen(!categoryDropdownOpen);
   };
 
+  const toggleQuickLinks = () => {
+    setQuickLinksOpen(!quickLinksOpen);
+  };
+
   return (
     <>
+      {/* Mobile sidebar backdrop */}
+      {isSidebarOpen && <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-30 md:hidden" onClick={toggleSidebar} aria-hidden="true" />}
+
       <aside
         ref={sidebarRef}
         className={`
@@ -70,12 +84,12 @@ export default function Sidebar({ categories }: SidebarProps) {
           fixed md:sticky
           top-0 md:top-[73px]
           h-screen md:h-[calc(100vh-73px)]
-          z-40 md:z-0
+          z-40 md:z-20
           transition-all duration-300 ease-in-out
           bg-white
           border-r border-[var(--neutral-200)]
           overflow-y-auto
-          py-6 px-4
+          py-5 px-4
           flex flex-col
           ${isDesktopSidebarCollapsed ? "md:w-16 md:px-2" : ""}
         `}
@@ -96,7 +110,8 @@ export default function Sidebar({ categories }: SidebarProps) {
           </svg>
         </button>
 
-        <div className={`mb-8 ${isDesktopSidebarCollapsed ? "md:mt-6" : ""}`}>
+        {/* Categories section */}
+        <div className={`mb-6 ${isDesktopSidebarCollapsed ? "md:mt-6" : ""}`}>
           <div className={`flex items-center justify-between mb-3 ${isDesktopSidebarCollapsed ? "md:justify-center md:px-0" : "px-3"}`}>
             <h3 className={`font-cormorant text-lg font-semibold text-[var(--secondary)] ${isDesktopSidebarCollapsed ? "md:hidden" : ""}`}>Categories</h3>
             <button
@@ -136,6 +151,7 @@ export default function Sidebar({ categories }: SidebarProps) {
                         ${isActive ? "bg-[var(--primary-light)]/10 text-[var(--primary)] font-medium" : "text-gray-600 hover:text-[var(--primary)] hover:bg-[var(--neutral-100)]"}
                       `}
                       title={isDesktopSidebarCollapsed ? category.name : undefined}
+                      onClick={handleMobileNavClick}
                     >
                       <span className="flex-shrink-0 w-2 h-2 rounded-full bg-[var(--secondary-light)] mr-3"></span>
                       <span className={`truncate ${isDesktopSidebarCollapsed ? "md:hidden" : ""}`}>{category.name}</span>
@@ -148,20 +164,39 @@ export default function Sidebar({ categories }: SidebarProps) {
           </nav>
         </div>
 
+        {/* Quick Links section */}
         <div className={`mb-6 ${isDesktopSidebarCollapsed ? "md:px-0" : "px-3"}`}>
-          <h3 className={`font-cormorant text-lg font-semibold text-[var(--secondary)] mb-3 ${isDesktopSidebarCollapsed ? "md:text-center md:hidden" : ""}`}>Quick Links</h3>
-          {isDesktopSidebarCollapsed && (
-            <div className="hidden md:flex justify-center mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-500">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
-                />
+          <div className="flex items-center justify-between mb-3">
+            <h3 className={`font-cormorant text-lg font-semibold text-[var(--secondary)] ${isDesktopSidebarCollapsed ? "md:text-center md:hidden" : ""}`}>Quick Links</h3>
+            <button
+              onClick={toggleQuickLinks}
+              className={`text-gray-500 hover:text-[var(--primary)] transition-colors ${isDesktopSidebarCollapsed ? "md:hidden" : ""}`}
+              aria-expanded={quickLinksOpen}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className={`w-4 h-4 transition-transform ${quickLinksOpen ? "rotate-180" : ""}`}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
-            </div>
-          )}
-          <nav>
+            </button>
+            {isDesktopSidebarCollapsed && (
+              <div className="hidden md:flex justify-center mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-500">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+          <nav className={`${quickLinksOpen ? "block" : "hidden md:block"}`}>
             <ul className="space-y-1">
               <li>
                 <Link
@@ -173,6 +208,7 @@ export default function Sidebar({ categories }: SidebarProps) {
                     ${pathname === "/blog" ? "bg-[var(--primary-light)]/10 text-[var(--primary)] font-medium" : "text-gray-600 hover:text-[var(--primary)] hover:bg-[var(--neutral-100)]"}
                   `}
                   title={isDesktopSidebarCollapsed ? "All Articles" : undefined}
+                  onClick={handleMobileNavClick}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
@@ -195,6 +231,7 @@ export default function Sidebar({ categories }: SidebarProps) {
                     ${pathname === "/about" ? "bg-[var(--primary-light)]/10 text-[var(--primary)] font-medium" : "text-gray-600 hover:text-[var(--primary)] hover:bg-[var(--neutral-100)]"}
                   `}
                   title={isDesktopSidebarCollapsed ? "About" : undefined}
+                  onClick={handleMobileNavClick}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -207,10 +244,10 @@ export default function Sidebar({ categories }: SidebarProps) {
         </div>
 
         <div className={`mt-auto py-4 ${isDesktopSidebarCollapsed ? "md:hidden" : "px-3"}`}>
-          <div className="p-4 bg-[var(--neutral-100)] rounded-lg">
+          <div className="p-4 bg-[var(--neutral-100)] rounded-lg shadow-inner">
             <h4 className="font-medium text-sm mb-2 text-[var(--foreground)]">Explore Wisdom</h4>
             <p className="text-xs text-gray-600 mb-3">Discover spiritual knowledge and teachings on the Ismaili Path.</p>
-            <Link href="/blog" className="text-xs text-[var(--primary)] hover:text-[var(--primary-light)] transition-colors font-medium flex items-center">
+            <Link href="/blog" className="text-xs text-[var(--primary)] hover:text-[var(--primary-light)] transition-colors font-medium flex items-center" onClick={handleMobileNavClick}>
               Start Reading
               <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />

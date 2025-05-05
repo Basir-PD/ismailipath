@@ -20,6 +20,25 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05);
 
+  /* Typography variables */
+  --font-heading-spacing: -0.025em;
+  --font-body-spacing: -0.01em;
+  --line-height-heading: 1.2;
+  --line-height-body: 1.6;
+
+  /* Reading width */
+  --content-width-narrow: 680px;
+  --content-width-regular: 800px;
+  --content-width-wide: 1140px;
+
+  /* Responsive spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
   /* Animation speeds */
   --transition-fast: 150ms;
   --transition-normal: 250ms;
@@ -45,11 +64,18 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  line-height: 1.6;
-  letter-spacing: -0.01em;
+  line-height: var(--line-height-body);
+  letter-spacing: var(--font-body-spacing);
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 15px;
+  }
 }
 
 h1,
@@ -58,24 +84,64 @@ h3,
 h4,
 h5,
 h6 {
-  line-height: 1.2;
-  letter-spacing: -0.03em;
+  font-family: var(--font-cormorant);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--font-heading-spacing);
   font-weight: 600;
   color: var(--foreground);
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-md);
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2.75rem;
+  line-height: 1.1;
+  font-weight: 700;
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: 2.25rem;
+  font-weight: 700;
 }
 
 h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
   font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.25rem;
+  }
+
+  h2 {
+    font-size: 1.875rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  h4 {
+    font-size: 1.25rem;
+  }
+}
+
+p {
+  margin-bottom: var(--space-md);
+  max-width: 70ch;
 }
 
 a {
@@ -91,6 +157,40 @@ a:hover {
 /* Font utilities */
 .font-cormorant {
   font-family: var(--font-cormorant);
+}
+
+/* Container utilities */
+.container-narrow {
+  max-width: var(--content-width-narrow);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+.container-regular {
+  max-width: var(--content-width-regular);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+.container-wide {
+  max-width: var(--content-width-wide);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+@media (max-width: 640px) {
+  .container-narrow,
+  .container-regular,
+  .container-wide {
+    padding-left: var(--space-sm);
+    padding-right: var(--space-sm);
+  }
 }
 
 /* Button styling */
@@ -127,7 +227,7 @@ a:hover {
 /* Card styling */
 .card {
   background: white;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   box-shadow: var(--shadow-md);
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   overflow: hidden;
@@ -136,6 +236,39 @@ a:hover {
 .card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
+}
+
+/* Blog content styling */
+.prose {
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+@media (max-width: 640px) {
+  .prose {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+}
+
+.prose > * + * {
+  margin-top: var(--space-md);
+}
+
+.prose img {
+  border-radius: 0.5rem;
+  max-width: 100%;
+  height: auto;
+}
+
+.prose blockquote {
+  font-family: var(--font-cormorant);
+  font-style: italic;
+  border-left: 3px solid var(--secondary);
+  padding-left: var(--space-md);
+  margin-left: 0;
+  color: #4a4a4a;
+  font-size: 1.2em;
 }
 
 /* Notion content styling */
@@ -236,4 +369,26 @@ li.numbered_list_item {
   100% {
     width: 100%;
   }
+}
+
+/* Mobile Navigation */
+.mobile-nav-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.mobile-nav-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms, transform 200ms;
+}
+
+.mobile-nav-exit {
+  opacity: 1;
+}
+
+.mobile-nav-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 150ms, transform 150ms;
 }

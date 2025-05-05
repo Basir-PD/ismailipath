@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Cormorant } from "next/font/google";
+import { Cormorant, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 import Sidebar from "@/app/components/Sidebar";
@@ -18,10 +18,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 const cormorant = Cormorant({
   variable: "--font-cormorant",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -47,13 +54,16 @@ export default async function RootLayout({
   const categories = await fetchCategories();
 
   return (
-    <html lang="en" className="light">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} antialiased min-h-screen flex flex-col bg-[var(--background)]`}>
+    <html lang="en" className="light scroll-smooth">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} ${inter.variable} 
+        antialiased min-h-screen flex flex-col bg-[var(--background)]`}
+      >
         <NavigationProvider>
           <Navbar />
           <div className="flex-grow flex relative">
             <Sidebar categories={categories} />
-            <main className="flex-1 max-w-4xl mx-auto py-8 px-4 md:px-8 transition-all duration-300 ease-in-out">{children}</main>
+            <main className="flex-1 container-narrow py-6 md:py-8 transition-all duration-300 ease-in-out">{children}</main>
           </div>
           <Footer />
         </NavigationProvider>

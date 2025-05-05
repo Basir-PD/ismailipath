@@ -1,5 +1,3 @@
-import "server-only";
-
 import { cache } from "react";
 import { Client } from "@notionhq/client";
 import { BlockObjectResponse, PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
