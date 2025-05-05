@@ -1,9 +1,9 @@
 import { CategoryLoader, LoaderContainer } from "@/app/components/Loaders";
 
-export default function CategoryLoading() {
+export default function CategoriesLoading() {
   return (
     <LoaderContainer className="min-h-[70vh]">
-      <CategoryLoader text="Loading category" />
+      <CategoryLoader text="Loading categories" />
     </LoaderContainer>
   );
 }
