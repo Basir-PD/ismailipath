@@ -20,7 +20,7 @@ export default async function Navbar() {
                 className="text-xl md:text-2xl font-bold text-[var(--primary)] group-hover:text-[var(--primary-light)] transition-colors duration-300"
                 style={{ fontFamily: "var(--font-cormorant)" }}
               >
-                IsmailiPath
+                B. Payenda
               </span>
               <span className="ml-1 text-xs text-[var(--secondary)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">• enlightenment</span>
             </Link>

@@ -1,17 +1,17 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About | IsmailiPath",
-  description: "Learn more about IsmailiPath and our mission",
+  title: "About | B. Payenda",
+  description: "Learn more about B. Payenda and our mission",
 };
 
 export default function AboutPage() {
   return (
     <main className="max-w-2xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold mb-6">About IsmailiPath</h1>
+      <h1 className="text-3xl font-bold mb-6">About B. Payenda</h1>
 
       <div className="prose max-w-none">
-        <p className="mb-4">IsmailiPath is dedicated to providing thoughtful insights and resources for those interested in spiritual knowledge and teachings.</p>
+        <p className="mb-4">B. Payenda is dedicated to providing thoughtful insights and resources for those interested in spiritual knowledge and teachings.</p>
 
         <p className="mb-4">Our content is carefully curated from various sources, with a focus on delivering authentic information that can help guide your spiritual journey.</p>
 

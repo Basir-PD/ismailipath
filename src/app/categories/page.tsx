@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Categories | IsmailiPath",
+  title: "Categories | B. Payenda",
   description: "Browse articles by category",
 };
 

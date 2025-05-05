@@ -25,15 +25,15 @@ const cormorant = Cormorant({
 });
 
 export const metadata: Metadata = {
-  title: "IsmailiPath",
+  title: "B. Payenda",
   description: "Discover spiritual knowledge and teachings on the Ismaili Path - Explore insightful articles on spirituality, history, and wisdom",
   keywords: "Ismaili, spirituality, knowledge, teachings, wisdom, guidance",
-  authors: [{ name: "IsmailiPath" }],
+  authors: [{ name: "B. Payenda" }],
   openGraph: {
-    title: "IsmailiPath",
+    title: "B. Payenda",
     description: "Discover spiritual knowledge and teachings on the Ismaili Path",
     url: "https://ismailipath.com",
-    siteName: "IsmailiPath",
+    siteName: "B. Payenda",
     locale: "en_US",
     type: "website",
   },

@@ -36,7 +36,7 @@ export default function HeroSection() {
       <div className="relative z-10 max-w-5xl mx-auto px-4 py-24 md:py-32">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight" style={{ fontFamily: "var(--font-cormorant)" }}>
-            <span className="text-[var(--primary)]">IsmailiPath</span>
+            <span className="text-[var(--primary)]">B. Payenda</span>
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed">

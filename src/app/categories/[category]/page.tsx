@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: ParamsProps): Promise<Metadat
   const { category } = await params;
 
   return {
-    title: `${category} Articles | IsmailiPath`,
+    title: `${category} Articles | B. Payenda`,
     description: `Browse all articles in the ${category} category`,
   };
 }

@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: ParamsProps): Promise<Metadat
   const thumbnailUrl = thumbnail?.file?.url || thumbnail?.external?.url;
 
   return {
-    title: `${title} | IsmailiPath`,
+    title: `${title} | B. Payenda`,
     description,
     openGraph: {
       title,

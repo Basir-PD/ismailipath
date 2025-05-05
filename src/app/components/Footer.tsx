@@ -23,7 +23,7 @@ export default function Footer() {
           <div>
             <Link href="/" className="flex items-center">
               <span className="text-2xl font-bold" style={{ fontFamily: "var(--font-cormorant)" }}>
-                IsmailiPath
+                B. Payenda
               </span>
             </Link>
             <p className="mt-3 text-sm text-gray-600 max-w-md">Explore the spiritual journey through insightful articles, historical narratives, and wisdom teachings.</p>
@@ -109,7 +109,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 border-t border-gray-200 pt-8">
-          <p className="text-base text-gray-500 text-center">© {new Date().getFullYear()} IsmailiPath. All rights reserved.</p>
+          <p className="text-base text-gray-500 text-center">© {new Date().getFullYear()} B. Payenda. All rights reserved.</p>
         </div>
       </div>
     </footer>

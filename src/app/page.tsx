@@ -6,7 +6,7 @@ import PostCard from "./components/PostCard";
 import CategoryHeader from "./components/CategoryHeader";
 
 export const metadata: Metadata = {
-  title: "IsmailiPath | Spiritual Knowledge & Teachings",
+  title: "B. Payenda | Spiritual Knowledge & Teachings",
   description: "Discover spiritual knowledge and teachings on the Ismaili Path - Explore insightful articles on spirituality, history, and wisdom",
   keywords: ["Ismaili", "spirituality", "knowledge", "teachings", "wisdom", "guidance"],
 };
