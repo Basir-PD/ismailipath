@@ -15,6 +15,7 @@ export default function CategoryDropdown({ categories }: { categories: Category[
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -27,6 +28,11 @@ export default function CategoryDropdown({ categories }: { categories: Category[
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Close dropdown when navigating
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   const getColorClass = (color?: string) => {
     const colorMap: Record<string, string> = {
@@ -46,55 +52,64 @@ export default function CategoryDropdown({ categories }: { categories: Category[
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative group" ref={dropdownRef} onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
         className={`
           relative px-3 py-2 rounded-md font-medium text-sm
           transition-all duration-200 flex items-center
           ${pathname?.startsWith("/categories") ? "text-[var(--primary)] bg-[var(--primary-light)]/10" : "text-gray-600 hover:text-[var(--primary)] hover:bg-[var(--neutral-100)]"}
         `}
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen(!isOpen)} // Keep click functionality for accessibility
       >
-        Categories
-        <svg className={`ml-1 h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <div className="flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-4 h-4" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M5 8h14M5 16h14" />
+          </svg>
+          <span>Categories</span>
+        </div>
+        <svg
+          className={`ml-1 h-4 w-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
         {pathname?.startsWith("/categories") && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[var(--primary)]" aria-hidden="true" />}
       </button>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-lg bg-white border border-[var(--neutral-200)] overflow-hidden z-10">
-          <div className="py-2">
-            <div className="px-4 py-2 border-b border-[var(--neutral-100)]">
-              <h3 className="font-medium text-sm text-[var(--foreground)]">Browse Categories</h3>
-            </div>
-            <Link href="/categories" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[var(--neutral-100)] transition-colors" onClick={() => setIsOpen(false)}>
-              <span className="flex-shrink-0 w-2 h-2 rounded-full bg-[var(--secondary)] mr-3"></span>
-              All Categories
-            </Link>
-            <div className="px-3 py-2 max-h-80 overflow-y-auto">
-              {categories.map((category) => {
-                const isActive = pathname === `/categories/${encodeURIComponent(category.name)}`;
-                return (
-                  <Link
-                    key={category.id}
-                    href={`/categories/${encodeURIComponent(category.name)}`}
-                    className={`
-                      flex items-center px-3 py-2 rounded-md text-sm mb-1 last:mb-0
-                      transition-all duration-200 
-                      ${isActive ? "bg-[var(--primary-light)]/10 text-[var(--primary)] font-medium" : "text-gray-600 hover:text-[var(--primary)] hover:bg-[var(--neutral-100)]"}
-                    `}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <span className={`flex-shrink-0 w-2 h-2 rounded-full mr-3 ${getColorClass(category.color)}`}></span>
-                    <span className="truncate">{category.name}</span>
-                  </Link>
-                );
-              })}
-            </div>
+      <div
+        className={`
+          absolute right-0 mt-1 w-64 rounded-lg shadow-lg overflow-hidden z-10
+          transform transition-all duration-300 origin-top-right
+          bg-white/95 backdrop-blur-sm border border-[var(--neutral-200)]
+          ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}
+        `}
+      >
+        <div className="p-2 max-h-[70vh] overflow-y-auto custom-scrollbar">
+          <div className="grid grid-cols-1 gap-1">
+            {categories.map((category) => {
+              const isActive = pathname === `/categories/${encodeURIComponent(category.name)}`;
+              return (
+                <Link
+                  key={category.id}
+                  href={`/categories/${encodeURIComponent(category.name)}`}
+                  className={`
+                    flex items-center px-3 py-2.5 rounded-md text-sm
+                    transition-all duration-200 
+                    ${isActive ? "bg-[var(--primary-light)]/15 text-[var(--primary)] font-medium" : "text-gray-600 hover:text-[var(--primary)] hover:bg-[var(--neutral-100)]"}
+                  `}
+                >
+                  <span className={`flex-shrink-0 w-2 h-2 rounded-full mr-3 ${getColorClass(category.color)}`}></span>
+                  <span className="truncate">{category.name}</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
