@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@notion-render/bookmark-plugin": "^0.0.2",
     "@notion-render/client": "^0.0.2",
     "@notion-render/hljs-plugin": "^0.0.2",
     "@notionhq/client": "^2.3.0",
     "critters": "^0.0.20",
+    "framer-motion": "^12.9.7",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
