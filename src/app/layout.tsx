@@ -36,6 +36,12 @@ export const metadata: Metadata = {
   description: "Discover spiritual knowledge and teachings on the Ismaili Path - Explore insightful articles on spirituality, history, and wisdom",
   keywords: "Ismaili, spirituality, knowledge, teachings, wisdom, guidance",
   authors: [{ name: "B. Payenda" }],
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
   openGraph: {
     title: "B. Payenda",
     description: "Discover spiritual knowledge and teachings on the Ismaili Path",
@@ -57,7 +63,7 @@ export default async function RootLayout({
     <html lang="en" className="light scroll-smooth">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} ${inter.variable} 
-        antialiased min-h-screen flex flex-col bg-[var(--background)]`}
+        antialiased min-h-screen flex flex-col bg-[var(--background)] overflow-x-hidden`}
       >
         <NavigationProvider>
           <Navbar />
