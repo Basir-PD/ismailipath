@@ -142,70 +142,78 @@ export default function BlogListingWithFilters({ initialPosts, categories }: Blo
           </p>
         </div>
 
-        {/* Filter controls - responsive design */}
-        <div className={`md:flex ${showFilters ? "block" : "hidden md:block"} gap-4 bg-white rounded-lg shadow-sm p-4`}>
-          <div className="flex flex-wrap md:flex-nowrap gap-3 w-full">
-            {/* Category dropdown - enhanced design */}
-            <div className="relative group w-full md:w-1/2">
-              <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-white cursor-pointer hover:border-[var(--primary-light)] transition-colors">
-                <div className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1.5}
-                      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                    />
+        {/* Filter controls - now in a unified card */}
+        <div className={`${showFilters ? "block" : "hidden md:block"}`}>
+          <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Category dropdown */}
+              <div className="relative group flex-1">
+                <label htmlFor="category-filter" className="text-xs text-gray-500 font-medium block mb-1.5 ml-1">
+                  Filter by
+                </label>
+                <div className="flex items-center justify-between p-2.5 border border-gray-200 rounded-lg bg-white cursor-pointer hover:border-[var(--primary-light)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                      />
+                    </svg>
+                    <span className="text-sm font-medium">{getCategoryDisplayName()}</span>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
                   </svg>
-                  <span className="text-sm">{getCategoryDisplayName()}</span>
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-                </svg>
+
+                <select
+                  id="category-filter"
+                  value={currentFilter}
+                  onChange={(e) => updateParams({ category: e.target.value })}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  aria-label="Filter by category"
+                >
+                  <option value="">All Categories</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              <select
-                id="category-filter"
-                value={currentFilter}
-                onChange={(e) => updateParams({ category: e.target.value })}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                aria-label="Filter by category"
-              >
-                <option value="">All Categories</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Sort dropdown - enhanced design */}
-            <div className="relative group w-full md:w-1/2">
-              <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-white cursor-pointer hover:border-[var(--primary-light)] transition-colors">
-                <div className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+              {/* Sort dropdown */}
+              <div className="relative group flex-1">
+                <label htmlFor="sort-by" className="text-xs text-gray-500 font-medium block mb-1.5 ml-1">
+                  Sort by
+                </label>
+                <div className="flex items-center justify-between p-2.5 border border-gray-200 rounded-lg bg-white cursor-pointer hover:border-[var(--primary-light)] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                    </svg>
+                    <span className="text-sm font-medium">{getSortDisplayName()}</span>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
                   </svg>
-                  <span className="text-sm">{getSortDisplayName()}</span>
                 </div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
 
-              <select
-                id="sort-by"
-                value={currentSort}
-                onChange={(e) => updateParams({ sort: e.target.value })}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                aria-label="Sort posts"
-              >
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="a-z">Title (A-Z)</option>
-                <option value="z-a">Title (Z-A)</option>
-              </select>
+                <select
+                  id="sort-by"
+                  value={currentSort}
+                  onChange={(e) => updateParams({ sort: e.target.value })}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  aria-label="Sort posts"
+                >
+                  <option value="newest">Newest First</option>
+                  <option value="oldest">Oldest First</option>
+                  <option value="a-z">Title (A-Z)</option>
+                  <option value="z-a">Title (Z-A)</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
