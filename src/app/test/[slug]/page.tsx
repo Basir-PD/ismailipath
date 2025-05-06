@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
-export default function TestPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function TestPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
 
   console.log(`Test route executed with slug: "${slug}"`);
 

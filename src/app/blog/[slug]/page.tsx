@@ -13,9 +13,9 @@ import { Suspense } from "react";
 import Image from "next/image";
 
 // Define the params type
-type PageParams = {
+type PageParams = Promise<{
   slug: string;
-};
+}>;
 
 type ParamsProps = {
   params: PageParams;
@@ -46,7 +46,7 @@ type NotionFiles = {
 
 // Update to handle correct params
 export async function generateMetadata({ params }: ParamsProps): Promise<Metadata> {
-  const { slug } = params;
+  const { slug } = await params;
   const post = await fetchBySlug(slug);
 
   if (!post) {
@@ -81,7 +81,7 @@ export function generateStaticParams() {
 }
 
 export default async function Page({ params }: ParamsProps) {
-  const { slug } = params;
+  const { slug } = await params;
   console.log(`Blog page component rendering for slug: "${slug}"`);
 
   // Ensure slug is a string and correctly formatted
