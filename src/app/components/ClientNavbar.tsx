@@ -18,19 +18,8 @@ interface ClientNavbarProps {
 }
 
 export default function ClientNavbar({ categories }: ClientNavbarProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const offset = window.scrollY;
-      setIsScrolled(offset > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -54,9 +43,9 @@ export default function ClientNavbar({ categories }: ClientNavbarProps) {
 
   return (
     <>
-      <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? "shadow-md" : ""}`}>
+      <header className="sticky top-0 z-50 transition-all duration-300 shadow-sm">
         <ReadingProgressBar />
-        <nav className={`bg-white/95 backdrop-blur-sm border-b border-[var(--neutral-200)] py-3 md:py-4 transition-all ${isScrolled ? "md:py-3" : ""}`}>
+        <nav className="bg-white/95 backdrop-blur-sm border-b border-[var(--neutral-200)] py-3 transition-all">
           <div className="container-wide mx-auto flex justify-between items-center px-4 sm:px-6 md:px-8">
             <div className="flex items-center gap-3">
               <div className="md:hidden">
@@ -69,7 +58,6 @@ export default function ClientNavbar({ categories }: ClientNavbarProps) {
                 >
                   B. Payenda
                 </span>
-                <span className="ml-1 text-xs text-[var(--secondary)] opacity-0 group-hover:opacity-100 transition-opacity duration-300">• enlightenment</span>
               </Link>
             </div>
 
