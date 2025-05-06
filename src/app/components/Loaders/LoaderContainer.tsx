@@ -9,7 +9,7 @@ type LoaderContainerProps = {
   className?: string;
 };
 
-export default function LoaderContainer({ children, fullScreen = false, withBackground = true, className = "" }: LoaderContainerProps) {
+export default function LoaderContainer({ children, fullScreen = false, withBackground = false, className = "" }: LoaderContainerProps) {
   return (
     <div
       className={`
