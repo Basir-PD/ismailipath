@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { fetchPages, fetchCategories } from "../lib/notion";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import BlogListingWithFilters from "../components/BlogListingWithFilters";
-import BlogSearch from "../components/BlogSearch";
 
 // Define types based on the Notion properties we need
 type NotionTitle = {
@@ -64,8 +63,6 @@ export default async function BlogPage() {
         <div className="w-20 h-1 bg-[var(--primary)] mx-auto rounded-full mb-6"></div>
         <p className="text-gray-600 max-w-2xl mx-auto">Explore my latest thoughts, ideas, and insights on development, design, and technology.</p>
       </div>
-
-      <BlogSearch />
 
       <Suspense fallback={<div>Loading posts...</div>}>
         <BlogListingWithFilters initialPosts={formattedPosts} categories={categories} />

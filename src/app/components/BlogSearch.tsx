@@ -1,26 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export default function BlogSearch() {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
+type BlogSearchProps = {
+  onSearch: (query: string) => void;
+  searchQuery: string;
+};
+
+export default function BlogSearch({ onSearch, searchQuery }: BlogSearchProps) {
   const [isFocused, setIsFocused] = useState(false);
 
-  // Use useEffect for debouncing instead of a custom hook
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery.trim()) {
-        router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [searchQuery, router]);
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    onSearch(e.target.value);
   };
 
   return (

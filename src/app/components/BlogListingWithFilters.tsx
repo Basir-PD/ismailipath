@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import PostCard from "./PostCard";
+import BlogSearch from "./BlogSearch";
 
 // Define the blog post type based on the properties we need
 type BlogPost = {
@@ -32,10 +33,17 @@ export default function BlogListingWithFilters({ initialPosts, categories }: Blo
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Sort and filter posts whenever dependencies change
   useEffect(() => {
     let result = [...posts];
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter((post) => post.title.toLowerCase().includes(query) || post.category.toLowerCase().includes(query));
+    }
 
     // Apply category filter if selected
     if (currentFilter) {
@@ -60,7 +68,16 @@ export default function BlogListingWithFilters({ initialPosts, categories }: Blo
 
     setFilteredPosts(result);
     setTotalPages(Math.ceil(result.length / postsPerPage));
-  }, [posts, currentSort, currentFilter]);
+  }, [posts, currentSort, currentFilter, searchQuery]);
+
+  // Handle search
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    // Reset to page 1 when searching
+    if (currentPage > 1) {
+      updateParams({ page: "1" });
+    }
+  };
 
   // Current page posts
   const displayedPosts = filteredPosts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
@@ -111,40 +128,49 @@ export default function BlogListingWithFilters({ initialPosts, categories }: Blo
 
   return (
     <div className="space-y-8">
-      {/* Filters and sorting section - redesigned for better UX */}
-      <div className="mb-8">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-4">
-          {/* Mobile filter toggle button */}
-          <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2 md:hidden bg-white px-4 py-2.5 rounded-lg shadow-sm w-full mb-4 text-left">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-              />
-            </svg>
-            <span className="font-medium">Filters & Sorting</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className={`h-5 w-5 ml-auto transform transition-transform ${showFilters ? "rotate-180" : ""}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-
-          {/* Results count */}
-          <p className="text-sm text-gray-500 md:text-right">
-            Showing {filteredPosts.length === 0 ? 0 : (currentPage - 1) * postsPerPage + 1} - {Math.min(currentPage * postsPerPage, filteredPosts.length)} of {filteredPosts.length} posts
-          </p>
+      {/* Combined card for search and filters */}
+      <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100 mb-8">
+        {/* Search input */}
+        <div className="mb-4">
+          <label htmlFor="search" className="text-xs text-gray-500 font-medium block mb-1.5 ml-1">
+            Search
+          </label>
+          <BlogSearch onSearch={handleSearch} searchQuery={searchQuery} />
         </div>
 
-        {/* Filter controls - now in a unified card */}
-        <div className={`${showFilters ? "block" : "hidden md:block"}`}>
-          <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-100">
+        {/* Filters and sorting section */}
+        <div className="mb-4">
+          <div className="flex flex-col md:flex-row items-center justify-between mb-4">
+            {/* Mobile filter toggle button */}
+            <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2 md:hidden bg-white px-4 py-2.5 rounded-lg border border-gray-200 w-full mb-4 text-left">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                />
+              </svg>
+              <span className="font-medium">Filters & Sorting</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-5 w-5 ml-auto transform transition-transform ${showFilters ? "rotate-180" : ""}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {/* Results count */}
+            <p className="text-sm text-gray-500 md:text-right">
+              Showing {filteredPosts.length === 0 ? 0 : (currentPage - 1) * postsPerPage + 1} - {Math.min(currentPage * postsPerPage, filteredPosts.length)} of {filteredPosts.length} posts
+            </p>
+          </div>
+
+          {/* Filter controls */}
+          <div className={`${showFilters ? "block" : "hidden md:block"}`}>
             <div className="flex flex-col md:flex-row gap-4">
               {/* Category dropdown */}
               <div className="relative group flex-1">
@@ -239,7 +265,9 @@ export default function BlogListingWithFilters({ initialPosts, categories }: Blo
             </svg>
           </div>
           <p className="text-gray-500 mb-2 text-lg">No articles found.</p>
-          <p className="text-sm text-gray-400">Try changing your filters or check back soon for new content.</p>
+          <p className="text-sm text-gray-400">
+            {searchQuery.trim() ? "Try using different search terms or check your filters." : "Try changing your filters or check back soon for new content."}
+          </p>
         </div>
       )}
 
