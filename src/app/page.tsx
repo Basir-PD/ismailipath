@@ -70,27 +70,6 @@ export default async function Home() {
       <Suspense fallback={<div>Loading posts...</div>}>
         <BlogListingWithFilters initialPosts={formattedPosts} categories={categories} />
       </Suspense>
-
-      {/* Newsletter Section - Simplified */}
-      <section className="mt-16 mb-8 bg-gradient-to-r from-[var(--primary)]/5 to-[var(--primary)]/10 p-8 rounded-lg">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "var(--font-cormorant)" }}>
-            Stay Updated
-          </h2>
-          <p className="text-gray-600 mb-6">Subscribe to receive latest articles and spiritual insights.</p>
-          <form className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Your email"
-              className="flex-grow px-4 py-2 rounded-md border border-[var(--neutral-300)] focus:ring-[var(--primary)] focus:border-[var(--primary)]"
-              required
-            />
-            <button type="submit" className="btn btn-primary py-2 px-4 rounded-md font-medium whitespace-nowrap">
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </section>
     </div>
   );
 }
