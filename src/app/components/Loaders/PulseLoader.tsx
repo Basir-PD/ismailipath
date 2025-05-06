@@ -10,55 +10,56 @@ type PulseLoaderProps = {
 
 export default function PulseLoader({ primaryColor = "var(--primary)", secondaryColor = "var(--secondary)", text }: PulseLoaderProps) {
   const [dots, setDots] = useState("");
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const dotsInterval = setInterval(() => {
       setDots((prev) => {
         if (prev.length >= 3) return "";
         return prev + ".";
       });
     }, 300);
 
-    return () => clearInterval(interval);
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) return 0;
+        return prev + 5;
+      });
+    }, 150);
+
+    return () => {
+      clearInterval(dotsInterval);
+      clearInterval(progressInterval);
+    };
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center py-12">
-      <div className="relative w-24 h-32">
-        {/* Book/paper background */}
-        <div className="absolute inset-0 bg-white rounded-lg shadow-md transform translate-x-1 translate-y-1"></div>
+    <div className="flex flex-col items-center justify-center">
+      {/* Minimalistic spinner */}
+      <div className="relative w-10 h-10 mb-3">
+        {/* Background circle */}
+        <div className="absolute inset-0 border-2 border-gray-200 rounded-full"></div>
 
-        {/* Main page with pulse effect */}
-        <div className="absolute inset-0 bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="absolute inset-0 flex flex-col justify-start p-3">
-            {/* Lines of text with pulse animation */}
-            <div className="h-2 w-3/4 rounded bg-gray-200 animate-pulse mb-2"></div>
-            <div className="h-2 w-full rounded bg-gray-200 animate-pulse mb-2"></div>
-            <div className="h-2 w-2/3 rounded bg-gray-200 animate-pulse mb-2"></div>
-            <div className="h-2 w-5/6 rounded bg-gray-200 animate-pulse mb-2"></div>
-            <div className="h-2 w-4/5 rounded bg-gray-200 animate-pulse mb-2"></div>
+        {/* Animated arc */}
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            borderWidth: "2px",
+            borderColor: `${primaryColor} transparent transparent transparent`,
+            borderStyle: "solid",
+            transform: `rotate(${progress * 3.6}deg)`,
+            transition: "transform 0.15s linear",
+          }}
+        ></div>
 
-            {/* Bookmark with primary color */}
-            <div className="absolute -right-1 top-0 w-6 h-12 rounded-b-lg" style={{ backgroundColor: primaryColor }}></div>
-          </div>
-        </div>
-
-        {/* Animated page corner fold */}
-        <div className="absolute top-0 right-0 w-8 h-8 bg-gray-100" style={{ clipPath: "polygon(100% 0, 0 0, 100% 100%)" }}>
-          <div
-            className="absolute top-0 right-0 w-8 h-8 animate-pulse"
-            style={{
-              clipPath: "polygon(100% 0, 75% 0, 100% 25%)",
-              backgroundColor: secondaryColor,
-            }}
-          ></div>
-        </div>
+        {/* Center dot with secondary color */}
+        <div className="absolute w-2 h-2 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" style={{ backgroundColor: secondaryColor }}></div>
       </div>
 
       {text && (
-        <div className="mt-6 text-center font-medium text-gray-700">
+        <div className="text-center text-sm font-medium text-gray-700">
           {text}
-          {dots}
+          <span className="inline-block w-8">{dots}</span>
         </div>
       )}
     </div>
