@@ -14,6 +14,21 @@ const nextConfig: NextConfig = {
     optimizeCss: true,
     scrollRestoration: true,
   },
+  // Redirect blog URLs to home page and individual blog posts to article routes
+  async redirects() {
+    return [
+      {
+        source: "/blog",
+        destination: "/",
+        permanent: true,
+      },
+      {
+        source: "/blog/:slug",
+        destination: "/article/:slug",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

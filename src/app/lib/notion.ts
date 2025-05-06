@@ -66,19 +66,43 @@ export const fetchCategories = cache(async () => {
 
 // Enhanced caching for slug-based page fetching
 export const fetchBySlug = cache(async (slug: string) => {
-  console.log(`Fetching page by slug: ${slug}`);
+  console.log(`Fetching page by slug: "${slug}"`);
 
-  return notion.databases
-    .query({
-      database_id: process.env.NOTION_DATABASE_ID!,
-      filter: {
-        property: "Slug",
-        rich_text: {
-          equals: slug,
-        },
+  const response = await notion.databases.query({
+    database_id: process.env.NOTION_DATABASE_ID!,
+    filter: {
+      property: "Slug",
+      rich_text: {
+        equals: slug,
       },
-    })
-    .then((res) => res.results[0] as PageObjectResponse | undefined);
+    },
+  });
+
+  console.log(`Found ${response.results.length} results for slug "${slug}"`);
+
+  if (response.results.length === 0) {
+    console.log(`No page found with slug "${slug}". Checking database structure...`);
+
+    // Debug database structure if no results
+    try {
+      const dbInfo = await notion.databases.retrieve({
+        database_id: process.env.NOTION_DATABASE_ID!,
+      });
+      console.log("Database properties:", Object.keys(dbInfo.properties));
+
+      // Check if Slug property exists
+      const slugProperty = dbInfo.properties["Slug"];
+      if (!slugProperty) {
+        console.log("Error: No 'Slug' property found in the database");
+      } else {
+        console.log("Slug property type:", slugProperty.type);
+      }
+    } catch (error) {
+      console.error("Error fetching database info:", error);
+    }
+  }
+
+  return response.results[0] as PageObjectResponse | undefined;
 });
 
 // Enhanced caching for block fetching

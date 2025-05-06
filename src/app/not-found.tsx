@@ -10,7 +10,7 @@ export default function NotFound() {
         <Link href="/" className="px-5 py-2.5 bg-[var(--primary)] text-white rounded-md hover:bg-[var(--primary-dark)] transition-colors duration-300">
           Go Home
         </Link>
-        <Link href="/blog" className="px-5 py-2.5 border border-[var(--neutral-300)] rounded-md hover:bg-[var(--neutral-100)] transition-colors duration-300">
+        <Link href="/" className="px-5 py-2.5 border border-[var(--neutral-300)] rounded-md hover:bg-[var(--neutral-100)] transition-colors duration-300">
           Browse Articles
         </Link>
       </div>

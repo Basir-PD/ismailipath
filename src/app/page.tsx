@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { fetchPages, fetchCategories } from "./lib/notion";
+import { fetchPages, fetchCategories, fetchBySlug } from "./lib/notion";
 import { Metadata } from "next";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import BlogListingWithFilters from "./components/BlogListingWithFilters";
@@ -28,6 +28,17 @@ type NotionSelect = {
 export default async function Home() {
   const posts = await fetchPages();
   const categories = await fetchCategories();
+
+  // Test: Fetch the first article directly to verify functionality
+  if (posts.length > 0) {
+    const firstPost = posts[0] as PageObjectResponse;
+    const slug = (firstPost.properties.Slug as NotionRichText)?.rich_text?.[0]?.plain_text || "";
+    if (slug) {
+      console.log("Testing article fetch with slug:", slug);
+      const article = await fetchBySlug(slug);
+      console.log("Article fetch test result:", article ? "Success" : "Failed");
+    }
+  }
 
   // Transform posts to the format expected by BlogListingWithFilters
   const formattedPosts = posts.map((post) => {

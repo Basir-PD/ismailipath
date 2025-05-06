@@ -11,8 +11,10 @@ export default function ShareButtons({ title, slug }: ShareButtonsProps) {
   const [postUrl, setPostUrl] = useState("");
 
   useEffect(() => {
+    // Ensure the slug is encoded for URLs
+    const encodedSlug = encodeURIComponent(slug);
     // Get the full URL on the client side
-    setPostUrl(`${window.location.origin}/blog/${slug}`);
+    setPostUrl(`${window.location.origin}/article/${encodedSlug}`);
   }, [slug]);
 
   const shareLinks = [

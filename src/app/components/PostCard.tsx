@@ -10,6 +10,9 @@ type PostCardProps = {
 };
 
 export default function PostCard({ title, slug, date, category, compact = false }: PostCardProps) {
+  // Ensure the slug is properly encoded for URLs
+  const encodedSlug = encodeURIComponent(slug);
+
   // Check if the post is new (published in the last 7 days)
   const isNewPost = date ? new Date(date).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000 : false;
 
@@ -33,7 +36,7 @@ export default function PostCard({ title, slug, date, category, compact = false 
           {isNewPost && <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">New</span>}
         </div>
 
-        <Link href={`/blog/${slug}`} className="block group-hover:text-[var(--primary)] transition-colors duration-200">
+        <Link href={`/article/${encodedSlug}`} className="block group-hover:text-[var(--primary)] transition-colors duration-200">
           <h3 className={`font-semibold mb-2 ${compact ? "text-lg" : "text-xl md:text-2xl mb-3"}`} style={{ fontFamily: "var(--font-cormorant)" }}>
             {title}
           </h3>
@@ -51,7 +54,7 @@ export default function PostCard({ title, slug, date, category, compact = false 
         {!compact && (
           <div className="mt-4">
             <Link
-              href={`/blog/${slug}`}
+              href={`/article/${encodedSlug}`}
               className="text-sm font-medium text-[var(--primary)] hover:text-[var(--primary-light)] flex items-center transition-colors w-fit"
               aria-label={`Read more about ${title}`}
             >

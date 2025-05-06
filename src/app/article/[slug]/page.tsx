@@ -82,7 +82,7 @@ export function generateStaticParams() {
 
 export default async function Page({ params }: ParamsProps) {
   const { slug } = params;
-  console.log(`Blog page component rendering for slug: "${slug}"`);
+  console.log(`Article page component rendering for slug: "${slug}"`);
 
   // Ensure slug is a string and correctly formatted
   const cleanSlug = decodeURIComponent(String(slug));
@@ -90,10 +90,10 @@ export default async function Page({ params }: ParamsProps) {
 
   const post = await fetchBySlug(cleanSlug);
 
-  console.log(`Blog post fetch result: ${post ? "Found" : "Not found"}`);
+  console.log(`Article fetch result: ${post ? "Found" : "Not found"}`);
 
   if (!post) {
-    console.log(`Blog post not found for slug: "${cleanSlug}"`);
+    console.log(`Article not found for slug: "${cleanSlug}"`);
     notFound();
   }
 
