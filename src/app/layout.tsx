@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Cormorant, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/Navbar";
-import Sidebar from "@/app/components/Sidebar";
 import { fetchCategories } from "@/app/lib/notion";
 import NavigationProvider from "@/app/components/NavigationProvider";
 import Footer from "@/app/components/Footer";
@@ -57,7 +56,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = await fetchCategories();
+  await fetchCategories(); // Still fetch categories for potential use in navigation
 
   return (
     <html lang="en" className="light scroll-smooth">
@@ -67,10 +66,7 @@ export default async function RootLayout({
       >
         <NavigationProvider>
           <Navbar />
-          <div className="flex-grow flex relative">
-            <Sidebar categories={categories} />
-            <main className="flex-1 container-narrow py-6 md:py-8 transition-all duration-300 ease-in-out">{children}</main>
-          </div>
+          <main className="flex-grow container-narrow py-6 md:py-8 transition-all duration-300 ease-in-out">{children}</main>
           <Footer />
         </NavigationProvider>
       </body>
