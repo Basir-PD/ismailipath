@@ -1,7 +1,8 @@
 import { Suspense } from "react";
-import PostCard from "../components/PostCard";
-import { fetchPages } from "../lib/notion";
+import { fetchPages, fetchCategories } from "../lib/notion";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import BlogListingWithFilters from "../components/BlogListingWithFilters";
+import BlogSearch from "../components/BlogSearch";
 
 // Define types based on the Notion properties we need
 type NotionTitle = {
@@ -35,6 +36,24 @@ export const metadata = {
 
 export default async function BlogPage() {
   const posts = await fetchPages();
+  const categories = await fetchCategories();
+
+  // Transform posts to the format expected by BlogListingWithFilters
+  const formattedPosts = posts.map((post) => {
+    const pagePost = post as PageObjectResponse;
+    const title = (pagePost.properties.Title as NotionTitle)?.title?.[0]?.plain_text || "Untitled";
+    const slug = (pagePost.properties.Slug as NotionRichText)?.rich_text?.[0]?.plain_text || "";
+    const category = (pagePost.properties.Category as NotionSelect)?.select?.name || "Uncategorized";
+    const date = pagePost.created_time || "";
+
+    return {
+      id: pagePost.id,
+      title,
+      slug,
+      category,
+      date,
+    };
+  });
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
@@ -46,36 +65,11 @@ export default async function BlogPage() {
         <p className="text-gray-600 max-w-2xl mx-auto">Explore my latest thoughts, ideas, and insights on development, design, and technology.</p>
       </div>
 
+      <BlogSearch />
+
       <Suspense fallback={<div>Loading posts...</div>}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => {
-            const pagePost = post as PageObjectResponse;
-            const title = (pagePost.properties.Title as NotionTitle)?.title?.[0]?.plain_text || "Untitled";
-            const slug = (pagePost.properties.Slug as NotionRichText)?.rich_text?.[0]?.plain_text || "";
-            const category = (pagePost.properties.Category as NotionSelect)?.select?.name || "Uncategorized";
-            const date = formatDate(pagePost.created_time);
-
-            return <PostCard key={pagePost.id} title={title} slug={slug} date={date} thumbnailUrl={undefined} category={category} />;
-          })}
-        </div>
+        <BlogListingWithFilters initialPosts={formattedPosts} categories={categories} />
       </Suspense>
-
-      {posts.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--neutral-100)] flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
-          </div>
-          <p className="text-gray-500 mb-2 text-lg">No articles found.</p>
-          <p className="text-sm text-gray-400">Check back soon for new content.</p>
-        </div>
-      )}
     </div>
   );
 }
