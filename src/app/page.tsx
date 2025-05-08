@@ -1,3 +1,5 @@
+export const revalidate = 10; // revalidate this page every 10 seconds
+
 import { Suspense } from "react";
 import { fetchPages, fetchCategories, fetchBySlug } from "./lib/notion";
 import { Metadata } from "next";

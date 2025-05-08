@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { unstable_noStore } from "next/cache";
 import PostCard from "./PostCard";
 import BlogSearch from "./BlogSearch";
 
@@ -20,6 +21,9 @@ type BlogListingProps = {
 };
 
 export default function BlogListingWithFilters({ initialPosts, categories }: BlogListingProps) {
+  // Add this line to ensure this component is not cached
+  unstable_noStore();
+
   const router = useRouter();
   const searchParams = useSearchParams();
 

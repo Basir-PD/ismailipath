@@ -12,6 +12,9 @@ import "@/app/lib/notionBlockStyles.css";
 import { Suspense } from "react";
 import Image from "next/image";
 
+// Add a revalidate export at the top of the file, before any other code
+export const revalidate = 10; // revalidate this page every 10 seconds
+
 // Define the params type
 type PageParams = Promise<{
   slug: string;

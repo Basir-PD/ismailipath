@@ -1,3 +1,5 @@
+export const revalidate = 10; // revalidate this page every 10 seconds
+
 import { Suspense } from "react";
 import { fetchPages, fetchCategories } from "../lib/notion";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";

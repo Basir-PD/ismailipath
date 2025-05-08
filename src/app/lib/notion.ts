@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { Client } from "@notionhq/client";
 import { BlockObjectResponse, PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { revalidatePath } from "next/cache";
 
 // Initialize Notion client
 export const notion = new Client({
@@ -10,6 +11,10 @@ export const notion = new Client({
 // Enhanced caching for page fetching
 export const fetchPages = cache(async (categoryFilter?: string) => {
   console.log(`Fetching pages ${categoryFilter ? `for category: ${categoryFilter}` : "all"}`);
+
+  // Force revalidation of the cache for the homepage and blog page
+  revalidatePath("/");
+  revalidatePath("/blog");
 
   const filter = categoryFilter
     ? {
@@ -68,6 +73,9 @@ export const fetchCategories = cache(async () => {
 export const fetchBySlug = cache(async (slug: string) => {
   console.log(`Fetching page by slug: "${slug}"`);
 
+  // Force revalidation for this specific article page
+  revalidatePath(`/blog/${slug}`);
+
   const response = await notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID!,
     filter: {
@@ -115,3 +123,10 @@ export const fetchPageBlocks = cache(async (pageId: string) => {
     })
     .then((res) => res.results as BlockObjectResponse[]);
 });
+
+// Create a function to manually revalidate the entire site
+export async function revalidateEntireSite() {
+  revalidatePath("/");
+  revalidatePath("/blog");
+  console.log("Revalidated entire site");
+}
